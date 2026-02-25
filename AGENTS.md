@@ -119,3 +119,29 @@
 python -m py_compile main.py src/*.py data_provider/*.py
 flake8 main.py src/ --max-line-length=120
 ```
+
+## Cursor Cloud specific instructions
+
+### Services overview
+
+| Service | How to run | Notes |
+|---------|-----------|-------|
+| Python backend (FastAPI) | `python main.py --webui-only` | Serves API at port 8000, also hosts the built frontend as static files |
+| React frontend (dsa-web) | `cd apps/dsa-web && npm run dev` | Vite dev server; for production, `npm run build` outputs to `static/` |
+
+### Running checks
+
+- **Backend CI gate** (syntax + flake8 + offline pytest): `./scripts/ci_gate.sh`
+- **Frontend lint**: `cd apps/dsa-web && npx eslint .`
+- **Frontend build**: `cd apps/dsa-web && npm run build`
+- **Full test suite**: `./test.sh all` (includes network-dependent tests that may fail without API keys)
+- **Offline tests only**: `python -m pytest -m "not network"`
+- See `docs/CONTRIBUTING.md` for the full local gate checklist.
+
+### Caveats
+
+- The VM may not have `python` on PATH (only `python3`). The update script creates a symlink; if missing, run `sudo ln -sf /usr/bin/python3 /usr/bin/python`.
+- `.env` must exist before running the backend. Copy from `.env.example`. Set `WEBUI_HOST=0.0.0.0` for access from outside localhost.
+- The frontend build (`apps/dsa-web`) outputs into `/workspace/static/` which the FastAPI server serves. If the frontend has not been built, the WebUI pages will 404.
+- Stock analysis and Agent chat require at least one AI API key (Gemini / OpenAI / Anthropic) configured in `.env`. The WebUI server itself starts without API keys.
+- `pip install` scripts are installed to `~/.local/bin`; ensure this is on PATH (`export PATH="$HOME/.local/bin:$PATH"`).
