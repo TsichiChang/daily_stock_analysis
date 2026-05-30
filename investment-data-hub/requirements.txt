@@ -1,0 +1,9 @@
+# 核心
+requests>=2.31
+pandas>=2.0
+python-dotenv>=1.0
+tenacity>=8.2
+
+# 开发 / 测试
+pytest>=7.4
+flake8>=6.1

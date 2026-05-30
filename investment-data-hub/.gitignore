@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# 配置与数据
+.env
+data/
+*.log
+
+# 编辑器
+.idea/
+.vscode/
+.DS_Store
